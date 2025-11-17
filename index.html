@@ -848,6 +848,100 @@
             padding-bottom: 20px;
         }
 
+        /* Улучшенный слайдер для количества */
+        .slider-container {
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+            border-radius: 20px;
+            border: 2px solid #e0e0e0;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .slider-wrapper {
+            position: relative;
+            padding: 30px 0;
+        }
+
+        .slider-value-display {
+            text-align: center;
+            font-size: 72px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 16px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #e0e0e0 0%, #667eea 50%, #764ba2 100%);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6), 0 0 0 4px rgba(255,255,255,0.8);
+            transition: all 0.3s ease;
+            border: 3px solid white;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.8), 0 0 0 5px rgba(255,255,255,0.9);
+        }
+
+        .slider::-webkit-slider-thumb:active {
+            transform: scale(1.1);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6), 0 0 0 4px rgba(255,255,255,0.8);
+            transition: all 0.3s ease;
+        }
+
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.8), 0 0 0 5px rgba(255,255,255,0.9);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .slider-labels span:first-child {
+            color: #667eea;
+        }
+
+        .slider-labels span:last-child {
+            color: #764ba2;
+        }
+
         /* Темная тема - только черное, серое, белый текст */
         body.dark-theme {
             background: #000000;
@@ -1055,12 +1149,39 @@
             background: #1a1a1a;
         }
 
+        body.dark-theme .slider-container {
+            background: #1a1a1a;
+            border-color: #333333;
+        }
+
         body.dark-theme .slider {
             background: #333333;
         }
 
+        body.dark-theme .slider-value-display {
+            background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         body.dark-theme .slider-labels {
             color: #999999;
+        }
+
+        body.dark-theme .slider-labels span:first-child,
+        body.dark-theme .slider-labels span:last-child {
+            color: #cccccc;
+        }
+
+        body.dark-theme .slider::-webkit-slider-thumb {
+            background: linear-gradient(135deg, #666666 0%, #888888 100%);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 0 4px rgba(26,26,26,0.8);
+        }
+
+        body.dark-theme .slider::-moz-range-thumb {
+            background: linear-gradient(135deg, #666666 0%, #888888 100%);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 0 4px rgba(26,26,26,0.8);
         }
 
         /* Адаптивность для телефона */
@@ -1230,11 +1351,30 @@
             }
 
             .slider-container {
+                padding: 20px;
                 margin: 15px 0;
             }
 
             .slider-value-display {
-                font-size: 36px;
+                font-size: 48px;
+            }
+
+            .slider-wrapper {
+                padding: 20px 0;
+            }
+
+            .slider {
+                height: 12px;
+            }
+
+            .slider::-webkit-slider-thumb {
+                width: 32px;
+                height: 32px;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 32px;
+                height: 32px;
             }
 
             .slider-quick-buttons {
@@ -2425,12 +2565,12 @@
             const infoDiv = document.getElementById('voteTypeInfo');
             
             if (type === 'pikmi') {
-                infoDiv.innerHTML = '⭐ <strong>Pikmi Move</strong> — хороший балл, повышает рейтинг (+1)';
+                infoDiv.innerHTML = '⭐ <strong>Pikmi Move</strong> — хороший балл';
                 infoDiv.style.background = '#e0ffe0';
                 infoDiv.style.color = '#27ae60';
                 infoDiv.classList.remove('hidden');
             } else if (type === 'eball') {
-                infoDiv.innerHTML = '⚠️ <strong>E-Ball</strong> — плохой балл, понижает рейтинг (-1)';
+                infoDiv.innerHTML = '⚠️ <strong>E-Ball</strong> — плохой балл';
                 infoDiv.style.background = '#ffe0e0';
                 infoDiv.style.color = '#e74c3c';
                 infoDiv.classList.remove('hidden');
@@ -2500,22 +2640,25 @@
                     fileUrl = urlData.publicUrl;
                 }
 
-                // Создаем ОДНУ запись с количеством баллов
-                const record = {
-                    user_name: selectedUser,
-                    voter_login: currentUser.login,
-                    voter_name: currentUser.name,
-                    pikmi: voteType === 'pikmi' ? amount : 0,
-                    eball: voteType === 'eball' ? amount : 0,
-                    proof_text: proofText,
-                    proof_file_url: fileUrl,
-                    proof_file_name: fileName,
-                    proof_file_type: fileType
-                };
+                // Создаем несколько записей по 1 баллу каждая (для constraint в БД)
+                const records = [];
+                for (let i = 0; i < amount; i++) {
+                    records.push({
+                        user_name: selectedUser,
+                        voter_login: currentUser.login,
+                        voter_name: currentUser.name,
+                        pikmi: voteType === 'pikmi' ? 1 : 0,
+                        eball: voteType === 'eball' ? 1 : 0,
+                        proof_text: proofText,
+                        proof_file_url: fileUrl,
+                        proof_file_name: fileName,
+                        proof_file_type: fileType
+                    });
+                }
 
                 const { error: insertError } = await supabaseClient
                     .from('scores')
-                    .insert(record);
+                    .insert(records);
 
                 if (insertError) {
                     console.error('Insert error:', insertError);
