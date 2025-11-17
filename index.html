@@ -1479,9 +1479,8 @@
         <!-- Вкладки -->
         <div class="tabs">
             <button class="tab active" onclick="switchTab('main')">🏠 Главная</button>
-            <button class="tab" onclick="switchTab('calendar')">📅 Календарь</button>
             <button class="tab" onclick="switchTab('voting')">⭐ Голосование</button>
-            <button class="tab" onclick="switchTab('cringe')">💀 КРИНЖ</button>
+            <button class="tab" onclick="switchTab('cringe')">💀 КРИНЖ(Календарь)</button>
             <button class="tab" onclick="switchTab('myProfile')">👤 Мой профиль</button>
         </div>
 
@@ -1491,21 +1490,17 @@
             <div id="usersList"></div>
         </div>
 
-        <!-- Вкладка: Календарь -->
-        <div id="tab-calendar" class="tab-content">
-            <div id="pikmiRatingCalendar"></div>
-            <div id="calendarContainer"></div>
-            <div id="calendarEvents"></div>
-        </div>
-
         <!-- Вкладка: Голосование -->
         <div id="tab-voting" class="tab-content">
             <div id="votingContent"></div>
         </div>
 
-        <!-- Вкладка: КРИНЖ -->
+        <!-- Вкладка: КРИНЖ(Календарь) - объединенная -->
         <div id="tab-cringe" class="tab-content">
-            <div id="cringeContent"></div>
+            <div id="pikmiRatingCalendar"></div>
+            <div id="calendarContainer"></div>
+            <div id="calendarEvents"></div>
+            <div id="cringeContent" style="margin-top: 40px;"></div>
         </div>
 
         <!-- Вкладка: Мой профиль -->
@@ -1760,7 +1755,7 @@
             // Добавляем активный класс выбранной вкладке
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach((tab, index) => {
-                const tabNames = ['main', 'calendar', 'voting', 'cringe', 'myProfile'];
+                const tabNames = ['main', 'voting', 'cringe', 'myProfile'];
                 if (tabNames[index] === tabName) {
                     tab.classList.add('active');
                 }
@@ -1768,12 +1763,12 @@
             document.getElementById(`tab-${tabName}`).classList.add('active');
             
             // Загружаем контент вкладки
-            if (tabName === 'calendar') {
-                loadCalendar();
-                loadPikmiRating();
-            } else if (tabName === 'voting') {
+            if (tabName === 'voting') {
                 loadVotingTab();
             } else if (tabName === 'cringe') {
+                // Загружаем и календарь, и КРИНЖ контент
+                loadPikmiRating();
+                loadCalendar();
                 loadCringeTab();
             } else if (tabName === 'myProfile') {
                 loadMyProfile();
@@ -2665,9 +2660,10 @@
                 setTimeout(() => {
                     closeVoteModal();
                     loadUsers();
-                    // Обновляем рейтинг если открыта вкладка календаря
-                    if (document.getElementById('tab-calendar').classList.contains('active')) {
+                    // Обновляем рейтинг если открыта вкладка КРИНЖ
+                    if (document.getElementById('tab-cringe').classList.contains('active')) {
                         loadPikmiRating();
+                        loadCalendar();
                     }
                     // Обновляем голосование если открыта вкладка
                     if (document.getElementById('tab-voting').classList.contains('active')) {
