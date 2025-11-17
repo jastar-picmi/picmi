@@ -223,32 +223,216 @@
             margin-bottom: 30px;
         }
 
-        .file-input-wrapper {
+        /* Улучшенный стиль для загрузки файлов */
+        .file-upload-area {
             position: relative;
-            margin-top: 10px;
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .file-input-wrapper input[type="file"] {
+        .file-upload-area:hover {
+            border-color: #764ba2;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8efff 100%);
+            transform: scale(1.02);
+        }
+
+        .file-upload-area.dragover {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #e0ffe0 0%, #d0ffd0 100%);
+            transform: scale(1.05);
+        }
+
+        .file-upload-area input[type="file"] {
             position: absolute;
             opacity: 0;
             width: 100%;
             height: 100%;
+            top: 0;
+            left: 0;
             cursor: pointer;
         }
 
-        .file-label {
-            display: block;
-            padding: 12px;
-            background: #f8f9fa;
-            border: 2px dashed #667eea;
+        .file-upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-text {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .file-upload-hint {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .file-preview {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
             border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: background 0.3s;
+            border: 2px solid #e0e0e0;
         }
 
-        .file-label:hover {
-            background: #e9ecef;
+        .file-preview-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .file-preview-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .file-preview-icon {
+            font-size: 24px;
+        }
+
+        .file-preview-info {
+            flex: 1;
+        }
+
+        .file-preview-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .file-preview-size {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .file-remove-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .file-remove-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Улучшенный слайдер для количества */
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .slider-value-display {
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .slider {
+            width: 100%;
+            height: 12px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #e0e0e0 0%, #667eea 100%);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .slider-quick-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .slider-quick-btn {
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .slider-quick-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .slider-quick-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
         }
 
         .modal {
@@ -353,20 +537,30 @@
             overflow-y: auto;
         }
 
-        .number-input-group {
+        /* Улучшенные поля ввода */
+        .input-group input[type="text"],
+        .input-group input[type="password"] {
+            transition: all 0.3s;
+        }
+
+        .input-group input[type="text"]:focus,
+        .input-group input[type="password"]:focus {
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Сохранение логина */
+        .remember-me {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
         }
 
-        .number-input-group button {
-            width: 40px;
-            padding: 10px;
-        }
-
-        .number-input-group input {
-            text-align: center;
-            font-weight: bold;
+        .remember-me input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -376,11 +570,15 @@
         <h1>🔐 Вход в систему</h1>
         <div class="input-group">
             <label>Логин</label>
-            <input type="text" id="loginInput" placeholder="Введите логин">
+            <input type="text" id="loginInput" placeholder="Введите логин" autocomplete="username">
         </div>
         <div class="input-group">
             <label>Пароль</label>
-            <input type="password" id="passwordInput" placeholder="Введите пароль">
+            <input type="password" id="passwordInput" placeholder="Введите пароль" autocomplete="current-password">
+        </div>
+        <div class="remember-me">
+            <input type="checkbox" id="rememberMe">
+            <label for="rememberMe" style="margin: 0; font-weight: normal; cursor: pointer;">Запомнить меня</label>
         </div>
         <button onclick="login()">Войти</button>
         <div id="loginError" class="error hidden"></div>
@@ -395,9 +593,7 @@
             </div>
             <button class="btn-danger btn-small" onclick="logout()">Выйти</button>
         </div>
-
         <div class="stats-grid" id="myStats"></div>
-
         <h2 style="margin-top: 30px;">Участники</h2>
         <div id="usersList"></div>
     </div>
@@ -416,15 +612,26 @@
                     <option value="eball">⚠️ E-Ball (плохой балл)</option>
                 </select>
             </div>
-
             <div id="voteTypeInfo" class="hidden" style="padding: 10px; border-radius: 8px; margin-bottom: 15px;"></div>
-
+            
             <div class="input-group">
                 <label>Количество баллов</label>
-                <div class="number-input-group">
-                    <button onclick="changeAmount(-1)">−</button>
-                    <input type="number" id="voteAmount" value="1" min="1" max="10" readonly>
-                    <button onclick="changeAmount(1)">+</button>
+                <div class="slider-container">
+                    <div class="slider-value-display" id="sliderValueDisplay">1</div>
+                    <div class="slider-wrapper">
+                        <input type="range" id="voteAmountSlider" class="slider" min="1" max="10" value="1" step="1" oninput="updateSliderValue(this.value)">
+                        <div class="slider-labels">
+                            <span>1</span>
+                            <span>10</span>
+                        </div>
+                    </div>
+                    <div class="slider-quick-buttons">
+                        <div class="slider-quick-btn" onclick="setSliderValue(1)">1</div>
+                        <div class="slider-quick-btn" onclick="setSliderValue(3)">3</div>
+                        <div class="slider-quick-btn" onclick="setSliderValue(5)">5</div>
+                        <div class="slider-quick-btn" onclick="setSliderValue(7)">7</div>
+                        <div class="slider-quick-btn" onclick="setSliderValue(10)">10</div>
+                    </div>
                 </div>
             </div>
 
@@ -435,10 +642,13 @@
 
             <div class="input-group">
                 <label>Фото доказательства (необязательно)</label>
-                <div class="file-input-wrapper">
-                    <input type="file" id="proofFile" accept="image/*,video/*" onchange="updateFileName()">
-                    <div class="file-label" id="fileLabel">📎 Выберите файл</div>
+                <div class="file-upload-area" id="fileUploadArea">
+                    <input type="file" id="proofFile" accept="image/*,video/*" onchange="handleFileSelect(event)" multiple>
+                    <div class="file-upload-icon">📎</div>
+                    <div class="file-upload-text">Перетащите файлы сюда или нажмите для выбора</div>
+                    <div class="file-upload-hint">Поддерживаются изображения и видео</div>
                 </div>
+                <div id="filePreview" class="hidden"></div>
             </div>
 
             <button onclick="submitVote()">Отправить оценку</button>
@@ -466,11 +676,58 @@
 
         let currentUser = null;
         let selectedUser = null;
+        let selectedFiles = [];
+
+        // Загрузка сохраненных данных при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedCredentials();
+            checkSavedSession();
+        });
+
+        // Загрузка сохраненных логина/пароля
+        function loadSavedCredentials() {
+            const savedLogin = localStorage.getItem('savedLogin');
+            const rememberMe = localStorage.getItem('rememberMe') === 'true';
+            
+            if (savedLogin && rememberMe) {
+                document.getElementById('loginInput').value = savedLogin;
+                document.getElementById('rememberMe').checked = true;
+            }
+        }
+
+        // Проверка сохраненной сессии
+        async function checkSavedSession() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    // Проверяем что пользователь все еще существует
+                    const { data, error } = await supabaseClient.rpc('check_login', {
+                        p_login: currentUser.login,
+                        p_password: localStorage.getItem('userPassword') || ''
+                    });
+                    
+                    if (!error && data && data.length > 0) {
+                        currentUser = data[0];
+                        showMainPage();
+                    } else {
+                        // Сессия невалидна, очищаем
+                        localStorage.removeItem('currentUser');
+                        localStorage.removeItem('userPassword');
+                    }
+                } catch (error) {
+                    console.error('Session check error:', error);
+                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('userPassword');
+                }
+            }
+        }
 
         // Авторизация
         async function login() {
             const login = document.getElementById('loginInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
+            const rememberMe = document.getElementById('rememberMe').checked;
             const errorDiv = document.getElementById('loginError');
 
             if (!login || !password) {
@@ -491,13 +748,29 @@
 
                 if (data && data.length > 0) {
                     currentUser = data[0];
+                    
+                    // Сохраняем данные если нужно
+                    if (rememberMe) {
+                        localStorage.setItem('savedLogin', login);
+                        localStorage.setItem('rememberMe', 'true');
+                        localStorage.setItem('userPassword', password); // Временно для проверки сессии
+                    } else {
+                        localStorage.removeItem('savedLogin');
+                        localStorage.removeItem('rememberMe');
+                    }
+                    
+                    // Сохраняем сессию
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
                     showMainPage();
                 } else {
                     showMessage(errorDiv, 'Неверный логин или пароль', 'error');
+                    // Не очищаем поля при ошибке
                 }
             } catch (error) {
                 console.error('Login error:', error);
                 showMessage(errorDiv, 'Ошибка подключения: ' + error.message, 'error');
+                // Не очищаем поля при ошибке
             }
         }
 
@@ -538,6 +811,7 @@
                         <div class="stat-label" style="color: rgba(255,255,255,0.9);">Общий рейтинг</div>
                     </div>
                 `;
+
                 document.getElementById('myStats').innerHTML = statsHtml;
             } catch (error) {
                 console.error('Load stats error:', error);
@@ -572,6 +846,7 @@
 
                     const card = document.createElement('div');
                     card.className = 'user-card';
+
                     card.innerHTML = `
                         <div class="user-info">
                             <div class="user-avatar">${user.name.charAt(0).toUpperCase()}</div>
@@ -598,6 +873,7 @@
                             <button onclick="openActionsModal('${user.name}')" class="btn-secondary" style="flex: 1;">История</button>
                         </div>
                     `;
+
                     usersList.appendChild(card);
                 });
             } catch (error) {
@@ -608,20 +884,27 @@
         // Открыть модальное окно оценки
         function openVoteModal(userName) {
             selectedUser = userName;
+            selectedFiles = [];
+            
             document.getElementById('voteModalTitle').textContent = `Оценить: ${userName}`;
             document.getElementById('voteType').value = '';
-            document.getElementById('voteAmount').value = '1';
+            document.getElementById('voteAmountSlider').value = '1';
+            document.getElementById('sliderValueDisplay').textContent = '1';
             document.getElementById('proofText').value = '';
             document.getElementById('proofFile').value = '';
-            document.getElementById('fileLabel').textContent = '📎 Выберите файл';
             document.getElementById('voteTypeInfo').classList.add('hidden');
             document.getElementById('voteMessage').classList.add('hidden');
+            document.getElementById('filePreview').classList.add('hidden');
+            document.getElementById('filePreview').innerHTML = '';
+            
+            updateQuickButtons(1);
             document.getElementById('voteModal').classList.remove('hidden');
         }
 
         // Закрыть модальное окно оценки
         function closeVoteModal() {
             document.getElementById('voteModal').classList.add('hidden');
+            selectedFiles = [];
         }
 
         // Обновить информацию о типе оценки
@@ -644,30 +927,121 @@
             }
         }
 
-        // Изменить количество
-        function changeAmount(delta) {
-            const input = document.getElementById('voteAmount');
-            let value = parseInt(input.value) + delta;
-            if (value < 1) value = 1;
-            if (value > 10) value = 10;
-            input.value = value;
+        // Обновить значение слайдера
+        function updateSliderValue(value) {
+            document.getElementById('sliderValueDisplay').textContent = value;
+            updateQuickButtons(parseInt(value));
         }
 
-        // Обновить имя файла
-        function updateFileName() {
-            const fileInput = document.getElementById('proofFile');
-            const label = document.getElementById('fileLabel');
-            if (fileInput.files.length > 0) {
-                label.textContent = `📎 ${fileInput.files[0].name}`;
-            }
+        // Установить значение слайдера
+        function setSliderValue(value) {
+            document.getElementById('voteAmountSlider').value = value;
+            updateSliderValue(value);
         }
+
+        // Обновить активные кнопки быстрого выбора
+        function updateQuickButtons(activeValue) {
+            const buttons = document.querySelectorAll('.slider-quick-btn');
+            buttons.forEach(btn => {
+                if (parseInt(btn.textContent) === activeValue) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Обработка выбора файлов
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            addFiles(files);
+        }
+
+        // Добавить файлы
+        function addFiles(files) {
+            files.forEach(file => {
+                if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                    selectedFiles.push(file);
+                }
+            });
+            updateFilePreview();
+        }
+
+        // Обновить превью файлов
+        function updateFilePreview() {
+            const previewDiv = document.getElementById('filePreview');
+            
+            if (selectedFiles.length === 0) {
+                previewDiv.classList.add('hidden');
+                return;
+            }
+
+            previewDiv.classList.remove('hidden');
+            previewDiv.innerHTML = '<div class="file-preview">' +
+                selectedFiles.map((file, index) => {
+                    const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                    const fileIcon = file.type.startsWith('image/') ? '🖼️' : file.type.startsWith('video/') ? '🎥' : '📄';
+                    
+                    return `
+                        <div class="file-preview-item">
+                            <div class="file-preview-icon">${fileIcon}</div>
+                            <div class="file-preview-info">
+                                <div class="file-preview-name">${file.name}</div>
+                                <div class="file-preview-size">${fileSize} MB</div>
+                            </div>
+                            <button class="file-remove-btn" onclick="removeFile(${index})" title="Удалить">×</button>
+                        </div>
+                    `;
+                }).join('') +
+                '</div>';
+        }
+
+        // Удалить файл
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFilePreview();
+            
+            // Обновить input file
+            const fileInput = document.getElementById('proofFile');
+            const dt = new DataTransfer();
+            selectedFiles.forEach(file => dt.items.add(file));
+            fileInput.files = dt.files;
+        }
+
+        // Drag and drop для файлов
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, () => {
+                fileUploadArea.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, () => {
+                fileUploadArea.classList.remove('dragover');
+            }, false);
+        });
+
+        fileUploadArea.addEventListener('drop', (e) => {
+            const files = Array.from(e.dataTransfer.files);
+            addFiles(files);
+        }, false);
 
         // Отправить оценку
         async function submitVote() {
             const voteType = document.getElementById('voteType').value;
-            const amount = parseInt(document.getElementById('voteAmount').value);
+            const amount = parseInt(document.getElementById('voteAmountSlider').value);
             const proofText = document.getElementById('proofText').value.trim();
-            const fileInput = document.getElementById('proofFile');
             const messageDiv = document.getElementById('voteMessage');
 
             if (!voteType) {
@@ -685,9 +1059,9 @@
                 let fileName = null;
                 let fileType = null;
 
-                // Загрузка файла
-                if (fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
+                // Загрузка файла (берем первый файл если есть)
+                if (selectedFiles.length > 0) {
+                    const file = selectedFiles[0];
                     fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
                     fileType = file.type;
 
@@ -739,7 +1113,6 @@
                     loadMyStats();
                     loadUsers();
                 }, 2000);
-
             } catch (error) {
                 console.error('Vote error:', error);
                 showMessage(messageDiv, 'Ошибка: ' + error.message, 'error');
@@ -804,10 +1177,10 @@
         // Выход
         function logout() {
             currentUser = null;
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userPassword');
             document.getElementById('mainPage').classList.add('hidden');
             document.getElementById('loginPage').classList.remove('hidden');
-            document.getElementById('loginInput').value = '';
-            document.getElementById('passwordInput').value = '';
         }
 
         // Enter для входа
