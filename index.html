@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rating Platform Admin</title>
+    <title>Rating Platform Final</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -113,9 +113,11 @@
 
         /* Admin Panel */
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .admin-btn { padding: 15px; border-radius: 16px; font-weight: 800; color: white; border: none; cursor: pointer; transition: 0.2s; text-transform: uppercase; font-size: 12px; }
+        .admin-btn { padding: 15px; border-radius: 16px; font-weight: 800; color: white; border: none; cursor: pointer; transition: 0.2s; text-transform: uppercase; font-size: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .admin-btn:hover { transform: scale(1.02); opacity: 0.9; }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .admin-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; }
+        .user-row:last-child { border-bottom: none; }
 
         /* Elements */
         .avatar {
@@ -392,14 +394,33 @@
         <div id="tab-admin" class="tab-content">
             <div class="card" style="border: 1px solid var(--danger);">
                 <h2 style="margin-bottom: 20px; color: var(--danger);">⚡ Панель Управления</h2>
+                <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Внимание: удаленные данные восстановить невозможно.</p>
                 <div class="admin-grid">
-                    <button onclick="adminClearChat()" class="admin-btn" style="background: #3b82f6;">💬 Очистить Чат</button>
-                    <button onclick="adminClearCringe()" class="admin-btn" style="background: #f59e0b;">🤡 Очистить Кринж</button>
-                    <button onclick="adminResetAll()" class="admin-btn" style="background: #ef4444; grid-column: span 2;">💣 ПОЛНЫЙ СБРОС СИСТЕМЫ</button>
+                    <button id="btnCleanChat" onclick="adminClearChat(this)" class="admin-btn" style="background: #3b82f6;">💬 Очистить Чат</button>
+                    <button id="btnCleanCringe" onclick="adminClearCringe(this)" class="admin-btn" style="background: #f59e0b;">🤡 Очистить Кринж</button>
+                    <button id="btnResetAll" onclick="adminResetAll(this)" class="admin-btn" style="background: #ef4444; grid-column: span 2;">💣 ПОЛНЫЙ СБРОС СИСТЕМЫ</button>
                 </div>
             </div>
+            
+            <div class="card" style="border: 1px solid #3b82f6; margin-top: 15px;">
+                <h3 style="color: #3b82f6; margin-bottom: 10px;">🛡️ Настройки Анти-Спама</h3>
+                <p style="font-size: 11px; color: #666; margin-bottom: 10px;">Укажите задержку между сообщениями (в секундах).</p>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; font-weight: bold; color: #64748b;">Чат (сек)</label>
+                        <input type="number" id="adminChatDelay" value="2" style="margin: 5px 0;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; font-weight: bold; color: #64748b;">Голоса/Идеи (сек)</label>
+                        <input type="number" id="adminActionDelay" value="10" style="margin: 5px 0;">
+                    </div>
+                </div>
+                <button onclick="saveSpamSettings()" class="btn btn-primary" style="width: 100%;">Сохранить настройки</button>
+            </div>
+
             <div class="card">
                 <h3>Управление пользователями</h3>
+                <p style="font-size: 11px; color: #666; margin-bottom: 10px;">Забаненные пользователи не смогут войти.</p>
                 <div id="adminUsersList"></div>
             </div>
         </div>
@@ -482,7 +503,7 @@
                 <div id="changePasswordMessage" class="hidden"></div>
             </div>
             <div style="margin-bottom: 20px; border-top: 1px solid #eee; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <h4 style="margin: 0;">🌑 Темная тема (Noir)</h4>
+                <h4 style="margin: 0;">🌑 Темная тема </h4>
                 <label class="toggle-switch">
                     <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
                     <span class="toggle-slider"></span>
@@ -526,7 +547,8 @@
 
         // --- AUTH & BANS ---
         async function checkBanned(login) {
-            const { data } = await supabaseClient.from('scores').select('*').eq('user_name', 'SYSTEM_BAN').eq('proof_text', login);
+            const { data, error } = await supabaseClient.from('scores').select('*').eq('user_name', 'SYSTEM_BAN').eq('proof_text', login);
+            if (error) return false;
             return data && data.length > 0;
         }
 
@@ -568,9 +590,8 @@
                 document.getElementById('adminTabBtn').classList.remove('hidden');
             }
             
-            // Random Build Version
             const buildVer = `v.2.${Math.floor(Math.random()*9)}.${Math.floor(Math.random()*999)}`;
-            document.getElementById('devInfo').innerHTML = `Developer: <b>Anon</b><br>System Build: ${buildVer}`;
+            document.getElementById('devInfo').innerHTML = `Developer: <b>Rustem</b><br>System Build: ${buildVer}`;
 
             await Promise.all([loadMyStats(), loadUsers()]);
         }
@@ -606,9 +627,40 @@
             if(name === 'admin') loadAdminTab();
         }
 
+        // --- ADMIN SETTINGS (ANTI-SPAM) ---
+        async function loadSpamSettings() {
+            try {
+                const { data } = await supabaseClient.from('app_config').select('*');
+                if (data) {
+                    data.forEach(item => {
+                        if (item.key === 'chat_delay') document.getElementById('adminChatDelay').value = item.value;
+                        if (item.key === 'action_delay') document.getElementById('adminActionDelay').value = item.value;
+                    });
+                }
+            } catch(e) { console.log("Config table might be missing"); }
+        }
+
+        async function saveSpamSettings() {
+            const chatVal = document.getElementById('adminChatDelay').value;
+            const actionVal = document.getElementById('adminActionDelay').value;
+
+            const updates = [
+                { key: 'chat_delay', value: parseInt(chatVal) },
+                { key: 'action_delay', value: parseInt(actionVal) }
+            ];
+
+            const { error } = await supabaseClient.from('app_config').upsert(updates);
+
+            if (error) alert('Ошибка сохранения: ' + error.message + '\nПроверьте, создали ли вы таблицу app_config в SQL Editor.');
+            else alert('Настройки спама обновлены! Действуют мгновенно.');
+        }
+
         // --- ADMIN FUNCTIONS ---
         async function loadAdminTab() {
             if (currentUser.login !== 'Rustem') return;
+            
+            loadSpamSettings(); // Load Spam Config
+
             const { data } = await supabaseClient.from('users').select('id,name,login');
             const { data: bans } = await supabaseClient.from('scores').select('proof_text').eq('user_name', 'SYSTEM_BAN');
             const bannedLogins = (bans || []).map(b => b.proof_text);
@@ -619,44 +671,74 @@
                 if (u.login === 'Rustem') return ''; // Don't show self
                 return `
                     <div class="user-row">
-                        <div><b>${u.name}</b> (${u.login})</div>
+                        <div><b>${u.name}</b> <span style="color:#94a3b8; font-size:11px;">(${u.login})</span></div>
                         ${isBanned 
-                            ? `<span style="color:red;font-weight:bold;">ЗАБАНЕН</span> <button onclick="adminUnban('${u.login}')" style="margin-left:10px;">Разбан</button>` 
-                            : `<button onclick="adminBan('${u.login}')" style="background:#fee2e2;color:red;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;">ЗАБАНИТЬ</button>`}
+                            ? `<div style="display:flex;align-items:center;gap:10px;"><span style="color:red;font-weight:bold;font-size:11px;">ЗАБАНЕН</span> <button onclick="adminUnban('${u.login}')" style="background:#f1f5f9;border:1px solid #ddd;border-radius:8px;padding:4px 10px;cursor:pointer;">Разбан</button></div>` 
+                            : `<button onclick="adminBan('${u.login}')" style="background:#fee2e2;color:red;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:11px;">ЗАБАНИТЬ</button>`}
                     </div>`;
             }).join('');
         }
 
         async function adminBan(login) {
-            if(!confirm(`Забанить ${login}?`)) return;
-            await supabaseClient.from('scores').insert({ user_name: 'SYSTEM_BAN', proof_text: login, pikmi:0, eball:0 });
-            loadAdminTab();
+            if(!confirm(`Заблокировать доступ пользователю ${login}?`)) return;
+            const { error } = await supabaseClient.from('scores').insert({ user_name: 'SYSTEM_BAN', proof_text: login, pikmi:0, eball:0 });
+            if(error) alert("Ошибка бана: " + error.message);
+            else loadAdminTab();
         }
         
         async function adminUnban(login) {
              if(!confirm(`Разбанить ${login}?`)) return;
-             await supabaseClient.from('scores').delete().eq('user_name', 'SYSTEM_BAN').eq('proof_text', login);
-             loadAdminTab();
+             const { error } = await supabaseClient.from('scores').delete().eq('user_name', 'SYSTEM_BAN').eq('proof_text', login);
+             if(error) alert("Ошибка разбана: " + error.message);
+             else loadAdminTab();
         }
 
-        async function adminClearChat() {
+        async function adminClearChat(btn) {
             if(!confirm("Удалить ВСЮ переписку чата?")) return;
-            await supabaseClient.from('scores').delete().eq('user_name', 'CHAT');
-            alert('Чат очищен');
+            btn.disabled = true; btn.textContent = "Удаление...";
+            
+            const { error } = await supabaseClient.from('scores').delete().eq('user_name', 'CHAT');
+            
+            if (error) {
+                alert("Ошибка удаления: " + error.message + "\n(Проверьте RLS в Supabase)");
+            } else {
+                alert('Чат успешно очищен');
+            }
+            btn.disabled = false; btn.textContent = "💬 Очистить Чат";
         }
 
-        async function adminClearCringe() {
-             if(!confirm("Удалить ВСЕ посты из ленты (кроме идей и чата)?")) return;
-             await supabaseClient.from('scores').delete().neq('user_name', 'CHAT').neq('user_name', 'IDEA').neq('user_name', 'IDEA_VOTE').neq('user_name', 'REACTION').neq('user_name', 'SYSTEM_BAN');
-             alert('Лента очищена');
+        async function adminClearCringe(btn) {
+             if(!confirm("Удалить ВСЕ посты из ленты Кринж/Pikmi?")) return;
+             btn.disabled = true; btn.textContent = "Удаление...";
+
+             const { error } = await supabaseClient.from('scores').delete()
+                .neq('user_name', 'CHAT')
+                .neq('user_name', 'IDEA')
+                .neq('user_name', 'IDEA_VOTE')
+                .neq('user_name', 'REACTION')
+                .neq('user_name', 'SYSTEM_BAN');
+             
+             if (error) {
+                 alert("Ошибка удаления: " + error.message);
+             } else {
+                 alert('Лента очищена');
+             }
+             btn.disabled = false; btn.textContent = "🤡 Очистить Кринж";
         }
 
-        async function adminResetAll() {
+        async function adminResetAll(btn) {
             const code = prompt("Для полного сброса введите: RESET");
             if (code === 'RESET') {
-                await supabaseClient.from('scores').delete().neq('id', 0); // Delete everything
-                alert('Система сброшена');
-                location.reload();
+                btn.disabled = true; btn.textContent = "Уничтожение...";
+                const { error } = await supabaseClient.from('scores').delete().gt('id', -1); 
+                
+                if (error) {
+                    alert("КРИТИЧЕСКАЯ ОШИБКА: " + error.message);
+                    btn.disabled = false; btn.textContent = "💣 ПОЛНЫЙ СБРОС СИСТЕМЫ";
+                } else {
+                    alert('Система полностью сброшена. Перезагрузка...');
+                    location.reload();
+                }
             }
         }
 
@@ -688,7 +770,13 @@
             }
         }
         function clearChatFile() { document.getElementById('chatFileInput').value = ''; document.getElementById('chatFilePreview').classList.remove('visible'); }
-        async function deleteMessage(id) { if(confirm('Удалить?')) await supabaseClient.from('scores').delete().eq('id', id); }
+        async function deleteMessage(id) { 
+            if(confirm('Удалить?')) {
+                const { error } = await supabaseClient.from('scores').delete().eq('id', id); 
+                if(error) alert('Не удалось удалить.');
+                else loadChatMessages();
+            }
+        }
 
         async function loadChatMessages(playSound = false) {
             try {
@@ -723,9 +811,17 @@
             try {
                 let fileUrl = null, fileName = null;
                 if (file) { fileUrl = await uploadFile(file); fileName = file.name; }
-                await supabaseClient.from('scores').insert({ user_name: 'CHAT', voter_name: currentUser.name, voter_login: currentUser.login, proof_text: text, proof_file_url: fileUrl, proof_file_name: fileName, pikmi: 0, eball: 0 });
+                
+                // Try insert
+                const { error } = await supabaseClient.from('scores').insert({ user_name: 'CHAT', voter_name: currentUser.name, voter_login: currentUser.login, proof_text: text, proof_file_url: fileUrl, proof_file_name: fileName, pikmi: 0, eball: 0 });
+                
+                if(error) throw error;
+
                 input.value = ''; clearChatFile();
-            } catch(e) { alert('Ошибка: ' + e.message); } 
+            } catch(e) { 
+                // Catch SPAM error
+                alert('Ошибка: ' + e.message); 
+            } 
             finally { btn.disabled = false; btn.style.opacity = '1'; input.focus(); }
         }
 
@@ -793,10 +889,15 @@
         // --- REACTIONS ---
         async function submitReaction(postId, emoji, btn) {
             if (btn.classList.contains('active')) return;
-            btn.classList.add('active');
-            let span = btn.querySelector('span');
-            span.innerText = parseInt(span.innerText) + 1;
-            try { await supabaseClient.from('scores').insert({ user_name: 'REACTION', voter_name: currentUser.name, proof_text: `REACTION:${postId}:${emoji}`, pikmi: 0, eball: 0 }); } catch(e) {}
+            
+            try { 
+                const { error } = await supabaseClient.from('scores').insert({ user_name: 'REACTION', voter_name: currentUser.name, voter_login: currentUser.login, proof_text: `REACTION:${postId}:${emoji}`, pikmi: 0, eball: 0 }); 
+                if(error) throw error;
+
+                btn.classList.add('active');
+                let span = btn.querySelector('span');
+                span.innerText = parseInt(span.innerText) + 1;
+            } catch(e) { alert("Ошибка (Спам?): " + e.message); }
         }
 
         async function loadCringeTab() {
@@ -878,7 +979,13 @@
             const type = document.getElementById('voteType').value, amt = document.getElementById('voteAmountSlider').value, txt = document.getElementById('proofText').value, file = document.getElementById('proofFile').files[0];
             if(!type || !txt) return alert('Заполните все поля');
             btn.disabled = true; btn.innerHTML = '⏳ Отправка...';
-            try { const url = await uploadFile(file); await supabaseClient.from('scores').insert({ user_name: selectedUser, voter_login: currentUser.login, voter_name: currentUser.name, pikmi: type==='pikmi'?amt:0, eball: type==='eball'?amt:0, proof_text: txt, proof_file_url: url, proof_file_name: file?.name }); clearCache(); closeVoteModal(); loadMyStats(); loadUsers(); alert('Успешно!'); } catch(e) { alert(e.message); } finally { btn.disabled = false; btn.innerHTML = 'Отправить'; }
+            try { 
+                const url = await uploadFile(file); 
+                const { error } = await supabaseClient.from('scores').insert({ user_name: selectedUser, voter_login: currentUser.login, voter_name: currentUser.name, pikmi: type==='pikmi'?amt:0, eball: type==='eball'?amt:0, proof_text: txt, proof_file_url: url, proof_file_name: file?.name }); 
+                if(error) throw error;
+
+                clearCache(); closeVoteModal(); loadMyStats(); loadUsers(); alert('Успешно!'); 
+            } catch(e) { alert(e.message); } finally { btn.disabled = false; btn.innerHTML = 'Отправить'; }
         }
         
         function openNewIdeaModal() { document.getElementById('ideaModal').classList.add('visible'); }
@@ -887,9 +994,22 @@
              const btn = document.getElementById('submitIdeaBtn'); if(btn.disabled) return;
              const txt = document.getElementById('ideaText').value, file = document.getElementById('ideaFile').files[0]; if(!txt) return;
              btn.disabled = true; btn.innerHTML = '⏳ Публикация...';
-             try { const url = await uploadFile(file); await supabaseClient.from('scores').insert({ user_name: 'IDEA', voter_login: currentUser.login, voter_name: currentUser.name, proof_text: 'ИДЕЯ: '+txt, proof_file_url: url }); closeIdeaModal(); loadVotingTab(); } catch(e) { alert(e.message); } finally { btn.disabled = false; btn.innerHTML = 'Опубликовать'; }
+             try { 
+                 const url = await uploadFile(file); 
+                 const { error } = await supabaseClient.from('scores').insert({ user_name: 'IDEA', voter_login: currentUser.login, voter_name: currentUser.name, proof_text: 'ИДЕЯ: '+txt, proof_file_url: url }); 
+                 if(error) throw error;
+                 
+                 closeIdeaModal(); loadVotingTab(); 
+             } catch(e) { alert(e.message); } finally { btn.disabled = false; btn.innerHTML = 'Опубликовать'; }
         }
-        async function voteForIdea(id, type, btnElement) { if(btnElement) { btnElement.disabled = true; btnElement.innerHTML = '⏳'; } try { await supabaseClient.from('scores').insert({ user_name: 'IDEA_VOTE', voter_login: currentUser.login, voter_name: currentUser.name, proof_text: type==='plus'?`Голос за идею #${id}`:`Голос против идеи #${id}` }); loadVotingTab(); } catch(e) { alert(e.message); } }
+        async function voteForIdea(id, type, btnElement) { 
+            if(btnElement) { btnElement.disabled = true; btnElement.innerHTML = '⏳'; } 
+            try { 
+                const { error } = await supabaseClient.from('scores').insert({ user_name: 'IDEA_VOTE', voter_login: currentUser.login, voter_name: currentUser.name, proof_text: type==='plus'?`Голос за идею #${id}`:`Голос против идеи #${id}` }); 
+                if(error) throw error;
+                loadVotingTab(); 
+            } catch(e) { alert(e.message); } 
+        }
         
         function openSettings() { document.getElementById('settingsLogin').textContent = currentUser.login; document.getElementById('settingsModal').classList.add('visible'); }
         function closeSettings() { document.getElementById('settingsModal').classList.remove('visible'); }
