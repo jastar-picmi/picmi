@@ -2766,18 +2766,28 @@
                     return;
                 }
 
-                // Обновляем пароль в таблице users
-                const { error: updateError } = await retryRequest(async () => {
-                    return await supabaseClient
-                        .from('users')
-                        .update({ password: newPassword })
-                        .eq('id', currentUser.id)
-                        .eq('login', currentUser.login);
+                // Обновляем пароль через SQL функцию (безопаснее и обходит RLS)
+                const { data: result, error: updateError } = await retryRequest(async () => {
+                    return await supabaseClient.rpc('change_user_password', {
+                        p_login: currentUser.login,
+                        p_current_password: currentPassword,
+                        p_new_password: newPassword
+                    });
                 });
 
                 if (updateError) {
                     console.error('Update password error:', updateError);
                     throw updateError;
+                }
+
+                // Проверяем результат функции (Supabase RPC возвращает данные напрямую)
+                if (result) {
+                    // Если функция вернула JSON объект
+                    const resultObj = typeof result === 'string' ? JSON.parse(result) : result;
+                    if (!resultObj.success) {
+                        showMessage(messageDiv, resultObj.error || 'Ошибка при смене пароля', 'error');
+                        return;
+                    }
                 }
 
                 // Обновляем сохраненный пароль в localStorage если он там есть
